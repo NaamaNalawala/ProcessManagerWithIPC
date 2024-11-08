@@ -1,0 +1,71 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Naama\\source\\repos\\GameBoard\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{320C171E-7896-488C-B693-182EEED0AA12}|OldConsoleApp\\OldConsoleApp.csproj|c:\\users\\naama\\source\\repos\\gameboard\\oldconsoleapp\\globals.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{320C171E-7896-488C-B693-182EEED0AA12}|OldConsoleApp\\OldConsoleApp.csproj|solutionrelative:oldconsoleapp\\globals.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{320C171E-7896-488C-B693-182EEED0AA12}|OldConsoleApp\\OldConsoleApp.csproj|c:\\users\\naama\\source\\repos\\gameboard\\oldconsoleapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{320C171E-7896-488C-B693-182EEED0AA12}|OldConsoleApp\\OldConsoleApp.csproj|solutionrelative:oldconsoleapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2BA74004-2525-45B2-B63D-3B0B93253748}|NewConsoleApp\\NewConsoleApp.csproj|c:\\users\\naama\\source\\repos\\gameboard\\newconsoleapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2BA74004-2525-45B2-B63D-3B0B93253748}|NewConsoleApp\\NewConsoleApp.csproj|solutionrelative:newconsoleapp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Naama\\source\\repos\\GameBoard\\NewConsoleApp\\Program.cs",
+              "RelativeDocumentMoniker": "NewConsoleApp\\Program.cs",
+              "ToolTip": "C:\\Users\\Naama\\source\\repos\\GameBoard\\NewConsoleApp\\Program.cs",
+              "RelativeToolTip": "NewConsoleApp\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-08T19:51:07.641Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Globals.cs",
+              "DocumentMoniker": "C:\\Users\\Naama\\source\\repos\\GameBoard\\OldConsoleApp\\Globals.cs",
+              "RelativeDocumentMoniker": "OldConsoleApp\\Globals.cs",
+              "ToolTip": "C:\\Users\\Naama\\source\\repos\\GameBoard\\OldConsoleApp\\Globals.cs",
+              "RelativeToolTip": "OldConsoleApp\\Globals.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-08T19:44:56.702Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Naama\\source\\repos\\GameBoard\\OldConsoleApp\\Program.cs",
+              "RelativeDocumentMoniker": "OldConsoleApp\\Program.cs",
+              "ToolTip": "C:\\Users\\Naama\\source\\repos\\GameBoard\\OldConsoleApp\\Program.cs",
+              "RelativeToolTip": "OldConsoleApp\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-08T19:30:20.196Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

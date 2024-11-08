@@ -1,0 +1,14 @@
+C:\Users\Naama\source\repos\GameBoard\SharedBuild\Debug\net8.0\OldConsoleApp.exe
+C:\Users\Naama\source\repos\GameBoard\SharedBuild\Debug\net8.0\OldConsoleApp.deps.json
+C:\Users\Naama\source\repos\GameBoard\SharedBuild\Debug\net8.0\OldConsoleApp.runtimeconfig.json
+C:\Users\Naama\source\repos\GameBoard\SharedBuild\Debug\net8.0\OldConsoleApp.dll
+C:\Users\Naama\source\repos\GameBoard\SharedBuild\Debug\net8.0\OldConsoleApp.pdb
+C:\Users\Naama\source\repos\GameBoard\OldConsoleApp\obj\Debug\net8.0\OldConsoleApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Naama\source\repos\GameBoard\OldConsoleApp\obj\Debug\net8.0\OldConsoleApp.AssemblyInfoInputs.cache
+C:\Users\Naama\source\repos\GameBoard\OldConsoleApp\obj\Debug\net8.0\OldConsoleApp.AssemblyInfo.cs
+C:\Users\Naama\source\repos\GameBoard\OldConsoleApp\obj\Debug\net8.0\OldConsoleApp.csproj.CoreCompileInputs.cache
+C:\Users\Naama\source\repos\GameBoard\OldConsoleApp\obj\Debug\net8.0\OldConsoleApp.dll
+C:\Users\Naama\source\repos\GameBoard\OldConsoleApp\obj\Debug\net8.0\refint\OldConsoleApp.dll
+C:\Users\Naama\source\repos\GameBoard\OldConsoleApp\obj\Debug\net8.0\OldConsoleApp.pdb
+C:\Users\Naama\source\repos\GameBoard\OldConsoleApp\obj\Debug\net8.0\OldConsoleApp.genruntimeconfig.cache
+C:\Users\Naama\source\repos\GameBoard\OldConsoleApp\obj\Debug\net8.0\ref\OldConsoleApp.dll

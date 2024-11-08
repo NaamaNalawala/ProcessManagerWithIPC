@@ -1,0 +1,5 @@
+C:\Users\Naama\source\repos\GameBoard\SharedBuild\Release\net8.0\publish\NewConsoleApp.exe
+C:\Users\Naama\source\repos\GameBoard\SharedBuild\Release\net8.0\publish\NewConsoleApp.dll
+C:\Users\Naama\source\repos\GameBoard\SharedBuild\Release\net8.0\publish\NewConsoleApp.deps.json
+C:\Users\Naama\source\repos\GameBoard\SharedBuild\Release\net8.0\publish\NewConsoleApp.runtimeconfig.json
+C:\Users\Naama\source\repos\GameBoard\SharedBuild\Release\net8.0\publish\NewConsoleApp.pdb
