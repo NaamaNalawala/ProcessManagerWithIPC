@@ -1,131 +1,162 @@
-﻿using GameBoard;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.IO;
 using System.IO.Pipes;
+using System.Threading;
+using System.Threading.Tasks;
 
-Console.Write("Enter the number of NewConsoles to start (1-100): ");
-string newConsoleInput = Console.ReadLine();
-int numberOfNewConsoles;
-
-Console.Write("Enter the number of OldConsoles to start (1-100): ");
-string oldConsoleInput = Console.ReadLine();
-int numberOfOldConsoles;
-
-if (int.TryParse(newConsoleInput, out numberOfNewConsoles) && numberOfNewConsoles >= 1 && numberOfNewConsoles <= 100 &&
-    int.TryParse(oldConsoleInput, out numberOfOldConsoles) && numberOfOldConsoles >= 1 && numberOfOldConsoles <= 100)
+namespace GameBoard
 {
-    StartConsoles("NewConsoleApp.exe", "Console_", numberOfNewConsoles);
-    StartConsoles("OldConsoleApp.exe", "OldConsole_", numberOfOldConsoles);
-
-    Console.WriteLine($"Successfully started {numberOfNewConsoles} NewConsoles and {numberOfOldConsoles} OldConsoles.");
-
-    Task.Run(() => ListenForUpdates());
-    StartPollingOldConsoles(numberOfOldConsoles);
-
-    DisplayGameBoard();
-}
-else
-{
-    Console.WriteLine("Invalid input. Please enter numbers between 1 and 100.");
-}
-
-Console.WriteLine("Press any key to exit.");
-Console.ReadKey();
-static void StartConsoles(string executablePath, string prefix, int count)
-{
-    for (int i = 1; i <= count; i++)
+    class Program
     {
-        string uniqueId = $"{prefix}{i}";
-        Globals.consoleData[uniqueId] = "Waiting for input...";
+        static readonly ConcurrentDictionary<string, string> consoleData = new();
 
-        ProcessStartInfo psi = new ProcessStartInfo
+        static void Main(string[] args)
         {
-            FileName = executablePath,
-            Arguments = uniqueId,
-            UseShellExecute = true,
-            CreateNoWindow = false
-        };
+            Console.Write("Enter the number of NewConsoles to start (1-100): ");
+            var newConsoleInput = Console.ReadLine();
 
-        Process.Start(psi);
-        Console.WriteLine($"Started {prefix} with ID: {uniqueId}");
-    }
-}
-static async void ListenForUpdates()
-{
-    while (true)
-    {
-        using (var server = new NamedPipeServerStream("GameBoardPipe", PipeDirection.InOut, NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Message, PipeOptions.Asynchronous))
-        {
-            await server.WaitForConnectionAsync();
-            using (var reader = new StreamReader(server))
+            Console.Write("Enter the number of OldConsoles to start (1-100): ");
+            var oldConsoleInput = Console.ReadLine();
+
+            if (!(int.TryParse(newConsoleInput, out int numberOfNewConsoles) ||
+                (numberOfNewConsoles < 0 && numberOfNewConsoles >= 100)))
             {
-                string message = await reader.ReadLineAsync();
-                if (message != null)
-                {
-                    var parts = message.Split(':');
-                    string consoleId = parts[0];
-                    string value = parts[1];
+                Console.WriteLine("Invalid Input for New Console, value must be less than 100");
+            }
 
-                    // Update the dictionary with the new value
-                    lock (Globals.consoleData)
+            if (!(int.TryParse(oldConsoleInput, out int numberOfOldConsoles) ||
+                (numberOfOldConsoles < 0 && numberOfOldConsoles >= 100)))
+            {
+                Console.WriteLine("Invalid Input for Old Console, value must be less than 100");
+            }
+
+            StartConsoles("NewConsoleApp.exe", "Console_", numberOfNewConsoles);
+            StartConsoles("OldConsoleApp.exe", "OldConsole_", numberOfOldConsoles);
+
+            Console.WriteLine($"Successfully started {numberOfNewConsoles} " +
+                $"NewConsoles and {numberOfOldConsoles} OldConsoles.");
+
+            _ = Task.Run(() => ListenForUpdates());
+            _ = Task.Run(() => StartPollingOldConsoles(numberOfOldConsoles));
+
+            DisplayGameBoard();
+        }
+
+        static void StartConsoles(string executablePath, string prefix, int count)
+        {
+            for (int i = 1; i <= count; i++)
+            {
+                string uniqueId = $"{prefix}{i}";
+                consoleData[uniqueId] = "Waiting for input...";
+
+                ProcessStartInfo psi = new ()
+                {
+                    FileName = executablePath,
+                    Arguments = uniqueId,
+                    UseShellExecute = true,
+                    CreateNoWindow = false
+                };
+
+                Process.Start(psi);
+                Console.WriteLine($"Started {prefix} with ID: {uniqueId}");
+            }
+        }
+
+        static async Task ListenForUpdates()
+        {
+            while (true)
+            {
+                using (var server =
+                    new NamedPipeServerStream ("GameBoardPipe", PipeDirection.In, 
+                    NamedPipeServerStream.MaxAllowedServerInstances,
+                    PipeTransmissionMode.Message, PipeOptions.Asynchronous))
+                {
+                    try
                     {
-                        if (Globals.consoleData.ContainsKey(consoleId))
+                        await server.WaitForConnectionAsync();
+                        using var reader = new StreamReader(server);
+                        var message = await reader.ReadLineAsync();
+                        if (!string.IsNullOrWhiteSpace(message))
                         {
-                            Globals.consoleData[consoleId] = value;
+                            var parts = message.Split(':');
+                            if (parts.Length == 2)
+                            {
+                                string consoleId = parts[0];
+                                string value = parts[1];
+
+                                // Update the dictionary with the new value
+                                consoleData[consoleId] = value;
+                            }
                         }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error in ListenForUpdates: {ex.Message}");
                     }
                 }
             }
         }
-    }
-}
 
-static void StartPollingOldConsoles(int numberOfOldConsoles)
-{
-    Timer timer = new Timer(_ =>
-    {
-        for (int i = 1; i <= numberOfOldConsoles; i++)
+        static void StartPollingOldConsoles(int numberOfOldConsoles)
         {
-            string consoleId = $"OldConsole_{i}";
-            Task.Run(async () =>
+            for (int i = 1; i <= numberOfOldConsoles; i++)
             {
-                string value = await GetOldConsoleData(consoleId);
-                lock (Globals.consoleData)
+                int consoleIndex = i; // Capture the current value of i
+
+                // Create a separate timer for each console
+                var consoleTimer = new Timer(async _ =>
                 {
-                    Globals.consoleData[consoleId] = value;
-                }
-            });
-        }
-    }, null, 0, 1000);
-}
+                    try
+                    {
+                        string consoleId = $"OldConsole_{consoleIndex}";
+                        string value = await GetOldConsoleData(consoleId);
 
-static async Task<string> GetOldConsoleData(string consoleId)
-{
-    try
-    {
-        using (var client = new NamedPipeClientStream(".", consoleId, PipeDirection.In))
-        {
-            await client.ConnectAsync(1000);
-            using (var reader = new StreamReader(client))
-            {
-                return await reader.ReadLineAsync() ?? "No data";
+                        consoleData[consoleId] = value;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error polling {consoleIndex}: {ex.Message}");
+                    }
+                }, null, 0, 5000); 
             }
         }
-    }
-    catch
-    {
-        return "Error fetching data";
-    }
-}
-static void DisplayGameBoard()
-{
-    while (true)
-    {
-        Console.Clear();
-        Console.WriteLine("GameBoard Console:");
-        foreach (var entry in Globals.consoleData)
+
+
+        static async Task<string> GetOldConsoleData(string consoleId)
         {
-            Console.WriteLine($"{entry.Key} - {entry.Value}");
+            try
+            {
+                using (var client = new NamedPipeClientStream(".", consoleId, PipeDirection.InOut, PipeOptions.Asynchronous))
+                {
+                    await client.ConnectAsync(1000);
+                    using (var reader = new StreamReader(client))
+                    {
+                        string data = await reader.ReadLineAsync();
+                        return !string.IsNullOrEmpty(data) ? data : "No data";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching data from {consoleId}: {ex.Message}");
+                return "Error fetching data";
+            }
         }
-        Thread.Sleep(500);
+
+        static void DisplayGameBoard()
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("GameBoard Console:");
+                foreach (var entry in consoleData)
+                {
+                    Console.WriteLine($"{entry.Key} - {entry.Value}");
+                }
+                Thread.Sleep(500);
+            }
+        }
     }
 }

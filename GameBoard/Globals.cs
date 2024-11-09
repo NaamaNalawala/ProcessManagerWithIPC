@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace GameBoard
 {
     public static class Globals
     {
-        public static Dictionary<string, string> consoleData = new Dictionary<string, string>();
+        public static ConcurrentDictionary<string, string> consoleData = new ConcurrentDictionary<string, string>();
     }
 }
