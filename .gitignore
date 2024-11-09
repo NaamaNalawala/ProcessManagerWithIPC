@@ -1,0 +1,9 @@
+/SharedBuild/Debug/
+/SharedBuild/Release/
+/.vs/
+/GameBoard/obj/
+/NewConsoleApp/obj/
+/OldConsoleApp/obj/
+/.vs/GameBoard/v17/.suo
+/.vs/GameBoard/v17/DocumentLayout.backup.json
+/.vs/GameBoard/v17/DocumentLayout.json
