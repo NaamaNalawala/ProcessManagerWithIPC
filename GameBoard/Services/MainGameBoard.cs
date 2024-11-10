@@ -31,14 +31,45 @@ namespace GameBoard.Services
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("GameBoard Console:");
-                foreach (var entry in consoleData)
+                Console.WriteLine("************************************");
+                Console.WriteLine("*         GameBoard Console        *");
+                Console.WriteLine("************************************");
+                Console.WriteLine("| Console ID     | Data              | Status   |");
+                Console.WriteLine("-------------------------------------------------");
+
+                // Sort the console data by score
+                var sortedData = consoleData
+                    .OrderByDescending(entry => int.TryParse(entry.Value, out int score) ? score : int.MinValue)
+                    .ToList();
+
+                foreach (var entry in sortedData)
                 {
-                    Console.WriteLine($"{entry.Key} - {entry.Value}");
+                    string consoleId = entry.Key;
+                    string data = entry.Value;
+                    string status = "Running";
+
+                    // Determine the color based on console type (Old or New)
+                    if (consoleId.StartsWith("OldConsole"))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                    }
+                    else if (consoleId.StartsWith("Console"))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                    }
+
+                    // Display in a tabular format
+                    Console.WriteLine($"| {consoleId,-13} | {data,-16} | {status,-8} |");
+
+                    // Reset the console color to default
+                    Console.ResetColor();
                 }
+
+                Console.WriteLine("-------------------------------------------------");
                 Thread.Sleep(500);
             }
         }
+
     }
 
 }

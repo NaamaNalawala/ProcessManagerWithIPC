@@ -11,6 +11,11 @@ namespace GameBoard
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("***************************************");
+            Console.WriteLine("*     Welcome to the Game Board App    *");
+            Console.WriteLine("***************************************");
+            Console.WriteLine("This application tracks live scores from multiple gaming consoles.");
+
             int numberOfNewConsoles = GetConsoleCount("NewConsoles");
             int numberOfOldConsoles = GetConsoleCount("OldConsoles");
 
