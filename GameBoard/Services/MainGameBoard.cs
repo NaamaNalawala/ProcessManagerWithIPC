@@ -12,20 +12,29 @@ namespace GameBoard.Services
     public class MainGameBoard : IConsoleDataListener
     {
         private readonly ConcurrentDictionary<string, string> consoleData = new();
+        private readonly Dictionary<string, IConsoleProcess> _consoleProcesses = new();
+
 
         public void InitializeConsoleData(IEnumerable<string> consoleIds)
         {
             foreach (var id in consoleIds)
             {
-                consoleData[id] = "Waiting for input...";
+                consoleData[id] = "0";
             }
         }
 
-        public void OnDataReceived(string consoleId, string data)
+        public void RegisterConsoleProcess(IConsoleProcess consoleProcess)
         {
-            consoleData[consoleId] = data;
+            _consoleProcesses[consoleProcess.ConsoleId] = consoleProcess;
         }
 
+        public void OnDataReceived(string consoleId, string value)
+        {
+            if (consoleData.ContainsKey(consoleId))
+            {
+                consoleData[consoleId] = value;
+            }
+        }
         public void Display()
         {
             while (true)
@@ -37,7 +46,7 @@ namespace GameBoard.Services
                 Console.WriteLine("| Console ID     | Data              | Status   |");
                 Console.WriteLine("-------------------------------------------------");
 
-                // Sort the console data by score
+                // Sort the console data by score before displaying
                 var sortedData = consoleData
                     .OrderByDescending(entry => int.TryParse(entry.Value, out int score) ? score : int.MinValue)
                     .ToList();
@@ -46,9 +55,10 @@ namespace GameBoard.Services
                 {
                     string consoleId = entry.Key;
                     string data = entry.Value;
-                    string status = "Running";
+                    var status = _consoleProcesses.ContainsKey(consoleId)
+                    ? _consoleProcesses[consoleId].Status
+                    : "Unknown";
 
-                    // Determine the color based on console type (Old or New)
                     if (consoleId.StartsWith("OldConsole"))
                     {
                         Console.ForegroundColor = ConsoleColor.Yellow;
@@ -61,7 +71,6 @@ namespace GameBoard.Services
                     // Display in a tabular format
                     Console.WriteLine($"| {consoleId,-13} | {data,-16} | {status,-8} |");
 
-                    // Reset the console color to default
                     Console.ResetColor();
                 }
 

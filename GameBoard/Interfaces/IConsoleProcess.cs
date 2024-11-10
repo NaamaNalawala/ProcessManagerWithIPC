@@ -9,6 +9,7 @@ namespace GameBoard.Interfaces
     public interface IConsoleProcess
     {
         string ConsoleId { get; }
+        string Status { get; set; }
         Task StartAsync();
     }
 }

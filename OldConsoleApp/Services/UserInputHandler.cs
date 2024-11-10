@@ -24,7 +24,7 @@ namespace OldConsoleApp.Services
                 if (!string.IsNullOrWhiteSpace(input))
                 {
                     _scoreData.CurrentData = input;
-                    Logger.Log($"Updated score to: {_scoreData.CurrentData}");
+                    Logger.Log($"Updated score: {_scoreData.CurrentData}");
                 }
                 else
                 {

@@ -7,10 +7,13 @@ namespace GameBoard.Models
     public class NewConsoleProcess : IConsoleProcess
     {
         public string ConsoleId { get; }
+        public string Status { get; set; }
+        private Process _process;
 
         public NewConsoleProcess(string consoleId)
         {
             ConsoleId = consoleId;
+            Status = "Stopped";
         }
 
         public async Task StartAsync()
@@ -23,7 +26,15 @@ namespace GameBoard.Models
                 CreateNoWindow = false
             };
 
-            Process.Start(psi);
+            _process = Process.Start(psi);
+            Status = "Running";
+            // Monitor the process
+            _process.EnableRaisingEvents = true;
+            _process.Exited += (sender, e) =>
+            {
+                Status = "Stopped";
+            };
+
             await Task.CompletedTask;
         }
     }

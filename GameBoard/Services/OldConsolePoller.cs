@@ -13,24 +13,44 @@ namespace GameBoard.Services
     {
         private readonly List<OldConsoleProcess> oldConsoles;
         private readonly IConsoleDataListener dataListener;
+        private bool _isPolling;
 
         public OldConsolePoller(List<OldConsoleProcess> oldConsoles, IConsoleDataListener dataListener)
         {
             this.oldConsoles = oldConsoles;
             this.dataListener = dataListener;
+            _isPolling = true;
         }
 
         public void StartPolling()
         {
-            foreach (var console in oldConsoles)
+            _isPolling = true;
+            var pollingThread = new Thread(async () =>
             {
-                int pollingInterval = 5000;
-                var timer = new Timer(async _ =>
+                while (_isPolling)
                 {
-                    var data = await console.GetDataAsync();
-                    dataListener.OnDataReceived(console.ConsoleId, data);
-                }, null, 0, pollingInterval);
-            }
+                    foreach (var console in oldConsoles)
+                    {
+                        // Skip polling if the console status is "Stopped"
+                        if (console.Status == "Stopped")
+                        {
+                            continue;
+                        }
+
+                        var score = await console.GetDataAsync();
+                        dataListener.OnDataReceived(console.ConsoleId, score);
+                    }
+
+                    // Sleep for a short interval before polling again
+                    Thread.Sleep(1000);
+                }
+            });
+
+            pollingThread.Start();
+        }
+        public void StopPolling()
+        {
+            _isPolling = false;
         }
     }
 

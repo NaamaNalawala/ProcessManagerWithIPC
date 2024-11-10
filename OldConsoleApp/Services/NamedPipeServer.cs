@@ -24,17 +24,17 @@ namespace OldConsoleApp.Services
                 try
                 {
                     using var server = new NamedPipeServerStream(_pipeName, PipeDirection.InOut, 1, PipeTransmissionMode.Message, PipeOptions.Asynchronous);
-                    Logger.Log($"Waiting for connection: {_pipeName}");
+                    //Logger.Log($"Waiting for connection: {_pipeName}");
 
                     await server.WaitForConnectionAsync();
-                    Logger.Log($"Connection established: {_pipeName}");
+                    //Logger.Log($"Connection established: {_pipeName}");
 
                     using var writer = new StreamWriter(server) { AutoFlush = true };
 
                     // Write the current score data to the stream
                     string dataToWrite = _scoreData.CurrentData;
                     await writer.WriteLineAsync(dataToWrite);
-                    Logger.Log($"Wrote: {dataToWrite}");
+                    //Logger.Log($"Wrote: {dataToWrite}");
 
                     await Task.Delay(1000);
                 }

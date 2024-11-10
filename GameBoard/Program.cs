@@ -55,9 +55,14 @@ namespace GameBoard
             var gameBoard = new GameBoard.Services.MainGameBoard();
             gameBoard.InitializeConsoleData(consoleIds);
 
+            foreach (var console in consoles)
+            {
+                gameBoard.RegisterConsoleProcess(console);
+            }
+
             var cancellationTokenSource = new CancellationTokenSource();
 
-            // Start Named Pipe Listener
+            // Start Named Pipe Listener for new consoles(listen for the incoming data)
             var namedPipeListener = new NamedPipeListener("GameBoardPipe", gameBoard);
             _ = namedPipeListener.StartListeningAsync(cancellationTokenSource.Token);
 
